@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Darts for Roses 💘</title>
+
+<style>
+  body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, #ffe6ee, #ffd1dc);
+    text-align: center;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  h1 {
+    color: #c2185b;
+    margin-top: 20px;
+  }
+
+  #gameArea {
+    position: relative;
+    width: 100vw;
+    height: 75vh;
+  }
+
+  #dart {
+    position: absolute;
+    font-size: 80px;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.1s;
+  }
+
+  #dart:active {
+    transform: scale(0.85);
+  }
+
+  #roses {
+    font-size: 22px;
+    margin-top: 10px;
+  }
+
+  .rose {
+    font-size: 28px;
+    margin: 4px;
+    animation: pop 0.3s ease-out;
+  }
+
+  @keyframes pop {
+    from { transform: scale(0); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  #message {
+    font-size: 26px;
+    color: #ad1457;
+    margin-top: 10px;
+    min-height: 40px;
+  }
+
+  #winScreen {
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 230, 238, 0.95);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 10;
+  }
+
+  #winScreen h2 {
+    font-size: 36px;
+    color: #c2185b;
+  }
+
+  #winScreen p {
+    font-size: 22px;
+  }
+
+</style>
+</head>
+
+<body>
+
+<h1>Hit the Dart, Get a Rose 🌹</h1>
+<p>Every dart gives you a rose from me ❤️</p>
+
+<div id="roses">
+  Roses collected: <span id="count">0</span>
+</div>
+
+<div id="message"></div>
+
+<div id="gameArea">
+  <div id="dart">🎯</div>
+</div>
+
+<div id="roseGarden"></div>
+
+<div id="winScreen">
+  <h2>🏆 All my love unlocked 💖</h2>
+  <p>You win unlimited kisses 😘</p>
+</div>
+
+<audio id="popSound">
+  <source src="https://assets.mixkit.co/sfx/preview/mixkit-game-click-1114.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  let count = 0;
+  const dart = document.getElementById("dart");
+  const countDisplay = document.getElementById("count");
+  const roseGarden = document.getElementById("roseGarden");
+  const message = document.getElementById("message");
+  const winScreen = document.getElementById("winScreen");
+  const popSound = document.getElementById("popSound");
+  const gameArea = document.getElementById("gameArea");
+
+  function moveDart() {
+    const maxX = gameArea.clientWidth - 80;
+    const maxY = gameArea.clientHeight - 80;
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+    dart.style.left = `${x}px`;
+    dart.style.top = `${y}px`;
+  }
+
+  dart.addEventListener("click", () => {
+    popSound.currentTime = 0;
+    popSound.play();
+
+    count++;
+    countDisplay.textContent = count;
+
+    const rose = document.createElement("span");
+    rose.textContent = "🌹";
+    rose.className = "rose";
+    roseGarden.appendChild(rose);
+
+    if (count === 10) {
+      message.textContent = "💌 You owe me a kiss 😘";
+    }
+
+    if (count === 20) {
+      winScreen.style.display = "flex";
+    }
+
+    moveDart();
+  });
+
+  // Start position + movement loop
+  moveDart();
+  setInterval(moveDart, 1500);
+</script>
+
+</body>
+</html>
